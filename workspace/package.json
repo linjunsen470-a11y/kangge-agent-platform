@@ -16,8 +16,7 @@
     "@json2csv/plainjs": "^7.0.0",
     "echarts": "^6.1.0",
     "@aiden0z/pptx-renderer": "^1.2.4",
-    "playwright-core": "1.60.0",
-    "html2canvas": "^1.4.1"
+    "playwright-core": "1.60.0"
   },
   "private": true
 }
