@@ -1,0 +1,23 @@
+{
+  "name": "kangge-workspace",
+  "version": "1.0.0",
+  "description": "Reusable workspace tools",
+  "dependencies": {
+    "docx": "9.6.1",
+    "pptxgenjs": "4.0.1",
+    "sharp": "0.34.5",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0",
+    "dayjs": "^1.11.0",
+    "csv-parse": "^5.6.0",
+    "exceljs": "^4.4.0",
+    "d3": "^7.9.0",
+    "marked": "^15.0.0",
+    "@json2csv/plainjs": "^7.0.0",
+    "echarts": "^6.1.0",
+    "@aiden0z/pptx-renderer": "^1.2.4",
+    "playwright-core": "1.60.0",
+    "html2canvas": "^1.4.1"
+  },
+  "private": true
+}
