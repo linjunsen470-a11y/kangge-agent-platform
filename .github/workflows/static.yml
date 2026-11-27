@@ -12,13 +12,15 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
-      - name: Install the YAML parser
+      - name: Prepare YAML parser
         run: |
           python3 -m venv "$RUNNER_TEMP/static-check"
-          "$RUNNER_TEMP/static-check/bin/python" -m pip install --disable-pip-version-check --no-deps --only-binary=:all: PyYAML==6.0.3
-      - name: Check all Git objects and validate sources
+          "$RUNNER_TEMP/static-check/bin/python" -m pip install --no-deps --only-binary=:all: -r tools/requirements.txt
+      - name: Check repository and reachable history
         run: |
           "$RUNNER_TEMP/static-check/bin/python" -I tools/check_repository.py
+      - name: Run regression tests
+        run: |
+          "$RUNNER_TEMP/static-check/bin/python" -I -m unittest discover -s tests
