@@ -12,6 +12,15 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
+          fetch-depth: 0
           persist-credentials: false
-      - name: Run repository static checks
-        run: python3 -I tools/check_repository.py
+      - name: Prepare YAML parser
+        run: |
+          python3 -m venv "$RUNNER_TEMP/static-check"
+          "$RUNNER_TEMP/static-check/bin/python" -m pip install --no-deps --only-binary=:all: -r tools/requirements.txt
+      - name: Check repository and reachable history
+        run: |
+          "$RUNNER_TEMP/static-check/bin/python" -I tools/check_repository.py
+      - name: Run regression tests
+        run: |
+          "$RUNNER_TEMP/static-check/bin/python" -I -m unittest discover -s tests

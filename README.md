@@ -1,23 +1,28 @@
 # Kangge Agent Platform
 
-一个分为 Skills 与 Workspace 的单仓库，提供零外部依赖的仓库静态检查工具、可复用的模块依赖配置，以及脱敏后的通用工作约定。
+这个仓库包含 Skills 与 Workspace 两个模块，保留了可复用的依赖配置、脱敏工作约定和通用制作偏好。
 
 | 路径 | 内容 |
 | --- | --- |
 | [skills/](skills/README.md) | 仓库检查技能入口和两份模块 Python 依赖清单 |
-| [workspace/](workspace/) | npm 依赖与锁文件，以及 [AGENTS.md](workspace/AGENTS.md) 通用工作约定 |
-| [tools/check_repository.py](tools/check_repository.py) | 基于 Python 标准库的静态检查脚本（路径规范、语法配置、技能入口、基础凭据护栏与锁文件一致性） |
+| [workspace/](workspace/) | npm 依赖与锁文件、[工作约定](workspace/AGENTS.md) 和[通用制作偏好](workspace/memory/MEMORY.md) |
+| [tools/check_repository.py](tools/check_repository.py) | 检查当前文件、技能入口、配置语法、锁文件和 Git 历史 |
 | [docs/public-release.md](docs/public-release.md) | 公开迁移记录、保留来源映射、隔离统计与核验边界 |
 
 ## 运行静态检查
 
-在仓库根目录使用 Python 3.11 或更高版本，无需创建虚拟环境或安装第三方依赖：
+在完整克隆的仓库根目录，使用 Python 3.11 或更高版本创建环境并安装锁定版本的 YAML 解析器。浅克隆请先运行 `git fetch --unshallow`。
 
 ```sh
-python3 -I tools/check_repository.py
+python3 -m venv .venv
+.venv/bin/python -m pip install --no-deps --only-binary=:all: -r tools/requirements.txt
+.venv/bin/python -I tools/check_repository.py
+.venv/bin/python -I -m unittest discover -s tests
 ```
 
-命令仅读取本地已追踪文件，PR 与 `main` 上的 [GitHub Actions](.github/workflows/static.yml) 使用同一入口。该脚本负责仓库结构、Python/JSON/TOML/INI 语法、`SKILL.md` 元数据、`workspace` 依赖与锁文件一致性以及常见私钥/凭据/本机路径护栏检查；全历史深度密钥扫描由 GitHub 上的 GitGuardian 等专用工具承担。新增业务资产前仍需单独核实公开授权与隐私。
+检查器验证当前已追踪文件的目录结构、Python 语法、JSON/YAML/TOML/INI 配置、技能入口和 Workspace 根依赖。它还扫描当前提交及本地各引用可达的历史文件、路径、提交和标签，检查常见凭据及个人标识。Git 身份字段中的邮箱仅豁免联系地址规则，提交说明、标签说明和文件内容中的邮箱仍受检查。
+
+PR 的 CI 在 GitHub 生成的预合并版本上运行同一组命令。GitGuardian 提供独立的补充检查。新增业务资产仍需人工核实公开授权与隐私。[GitHub Actions 配置](.github/workflows/static.yml)
 
 ## 安装模块依赖
 

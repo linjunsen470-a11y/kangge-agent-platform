@@ -10,7 +10,7 @@
 | Workspace | 10,993 | 4 | 13 | 10,976 |
 | 合计 | 12,853 | 6 | 1,871 | 10,976 |
 
-> 完整 12,853 项的逐区间原始审计表（原 `release-inventory.tsv`，含 312 条私有归档序号区间）已从公开主干移除，留存于私有迁移归档与初次导入提交记录中；下表保留所有实际公开条目的来源映射。
+下表列出全部 6 项公开条目。初次导入的完整脱敏清单按 318 个序号区间覆盖 12,853 项，保留了各区间的数量和处置原因。[查看初次导入的完整脱敏清单](https://github.com/linjunsen470-a11y/kangge-agent-platform/blob/738df6c16d21dc574a1d35daec240b50c7058e63/docs/release-inventory.tsv)
 
 ## 保留条目来源映射
 
@@ -21,13 +21,13 @@
 | Workspace | `W000001` | 通用工作约定 | `workspace/AGENTS.md` | 保留 |
 | Workspace | `W000008` | 脱敏包锁定信息 | `workspace/package-lock.json` | 保留并裁剪无用浏览器依赖 `html2canvas`（327 → 322 项） |
 | Workspace | `W000009` | 公共包配置 | `workspace/package.json` | 保留并裁剪 `html2canvas`（15 → 14 项直接依赖） |
-| Workspace | `W010992` | 通用制作偏好 | `workspace/memory/MEMORY.md` | 已于后续精简移除（与当前公开模块无上下文关联） |
+| Workspace | `W010992` | 通用制作偏好 | [workspace/memory/MEMORY.md](../workspace/memory/MEMORY.md) | 保留 |
 
 ## 公开内容说明
 
 - **技能依赖**：`skills/http-validation/requirements.txt` 与核对副本逐字节一致；`skills/document-rendering/requirements.txt` 仅保留原有 5 项必需依赖声明及次序。两份目录均采用通用命名，当前包含的原业务技能入口为 0。
 - **Workspace**：保留通用工作约定 [AGENTS.md](../workspace/AGENTS.md) 以及 npm 依赖声明与锁文件。后续精简移除了 Node 环境中不适用的浏览器 DOM 库 `html2canvas` 及其 4 个独占传递依赖（剩余 322 个锁定项均保留原 SHA-512 完整性摘要）；第三方包代码由使用者按需从公共注册表安装。
-- **项目工程文件**：静态检查器 [tools/check_repository.py](../tools/check_repository.py)、仓库检查入口 [skills/repository-check/SKILL.md](../skills/repository-check/SKILL.md) 与 [GitHub Actions](../.github/workflows/static.yml) 来自仓库整理，不计入原包 6 项。后续精简将静态检查改为纯 Python 标准库零依赖实现，并移除了冗余的 `.env.example` 与手工目录台账 `skill-modules.tsv`。
+- 静态检查器、仓库检查技能和 CI 来自仓库整理，独立于原包的 6 项。检查器自动识别技能目录，用固定版本的 PyYAML 解析配置和技能元数据。精简后的仓库已移除 `.env.example` 和手工目录台账 `skill-modules.tsv`。[仓库检查技能](../skills/repository-check/SKILL.md)
 
 ## 隔离依据
 
@@ -37,5 +37,5 @@
 
 ## 验证与演进边界
 
-- 静态检查覆盖已追踪文件路径与模式、UTF-8 编码、Python/JSON/TOML/INI 语法、`SKILL.md` 元数据、`skills/` 目录结构、`workspace` 依赖与锁文件一致性，以及基础凭据/本机路径护栏；全历史密钥扫描由 GitGuardian 等专用检查承担。
+- 静态检查覆盖当前文件的路径与模式、编码、Python 和配置语法（包括 YAML）、技能结构及 Workspace 根依赖一致性。对本地引用及当前提交可达的 Git 历史，另查文件内容、目录名、提交与标签中的凭据和个人标识。运行命令及身份字段的处理见[仓库说明](../README.md#运行静态检查)。
 - 业务流程、外部服务、音视频处理与上游技能均未运行。原业务技能若要补充进仓库，应先定位对应来源序号，确认当前版本的公开授权与所需署名，并重新核查隐私与依赖。
