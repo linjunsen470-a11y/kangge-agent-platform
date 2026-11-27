@@ -1,9 +1,16 @@
 # Kangge Agent Platform
 
-这个仓库包含 Skills 与 Workspace 两个模块，保留了可复用的依赖配置、脱敏工作约定和通用制作偏好。
+面向 AI Agent 的 **Skills（技能）与 Workspace（工作区）公开底座仓库**。你可以用它做三件事：
+
+- **一键仓库体检**：通过内置静态检查器和 CI 自动拦截语法错误、配置失效、目录命名冲突以及误提交的凭据与敏感信息。
+- **快速搭建工具环境**：直接复用 `workspace/` 中 14 个文档/表格/图表/图像/网页自动化 npm 工具包，以及 `skills/` 中的两份 Python 模块依赖配方。
+- **沉淀 Agent 协作规范**：提供脱敏后的通用工作约定与制作偏好，作为后续逐步迁入业务技能的干净骨架。
+
+> 第一次接触本仓库？建议先读面向人类读者的 [**项目使用指南（能干什么 & 怎么用）**](docs/usage-guide.md)。
 
 | 路径 | 内容 |
 | --- | --- |
+| [docs/usage-guide.md](docs/usage-guide.md) | 面向人类读者的功能说明、目录导览与分场景上手教程 |
 | [skills/](skills/README.md) | 仓库检查技能入口和两份模块 Python 依赖清单 |
 | [workspace/](workspace/) | npm 依赖与锁文件、[工作约定](workspace/AGENTS.md) 和[通用制作偏好](workspace/memory/MEMORY.md) |
 | [tools/check_repository.py](tools/check_repository.py) | 检查当前文件、技能入口、配置语法、锁文件和 Git 历史 |
@@ -20,9 +27,9 @@ python3 -m venv .venv
 .venv/bin/python -I -m unittest discover -s tests
 ```
 
-检查器验证当前已追踪文件的目录结构、Python 语法、JSON/YAML/TOML/INI 配置、技能入口和 Workspace 根依赖。它还扫描当前提交及本地各引用可达的历史文件、路径、提交和标签，检查常见凭据及个人标识。Git 身份字段中的邮箱仅豁免联系地址规则，提交说明、标签说明和文件内容中的邮箱仍受检查。
+检查器验证当前已追踪文件的目录结构、Python 语法、JSON/YAML/TOML/INI 配置、技能入口和 Workspace 根依赖。它还扫描当前提交及本地各引用可达的历史文件、路径、提交和标签，检查常见凭据及个人标识。Git 身份字段和标准 `Co-authored-by:` 尾注中的邮箱仅豁免联系地址规则，其余提交说明、标签说明和文件内容中的邮箱仍受检查。
 
-PR 的 CI 在 GitHub 生成的预合并版本上运行同一组命令。GitGuardian 提供独立的补充检查。新增业务资产仍需人工核实公开授权与隐私。[GitHub Actions 配置](.github/workflows/static.yml)
+PR 的 CI 在 GitHub 生成的预合并版本上运行同一组命令，GitGuardian 提供独立的补充检查；配置文件见 [.github/workflows/static.yml](.github/workflows/static.yml)。新增业务资产仍需人工核实公开授权与隐私。
 
 ## 安装模块依赖
 

@@ -47,6 +47,7 @@ GUARD_RULES = [
 CONTACT = re.compile(r"(?i)\b[\w.+%-]+@(?!example\.(?:invalid|com|org|net)\b)[a-z0-9.-]+\.[a-z]{2,}\b")
 # Git generates these identity fields separately from user-written messages and file contents.
 GIT_IDENTITY_EMAIL = re.compile(r"(?m)^((?:author|committer|tagger) [^\n<>]*<)[^<>\s@]+@[^<>\s@]+(> -?\d+ [+-]\d{4})$")
+GIT_COAUTHOR_EMAIL = re.compile(r"(?im)^(Co-authored-by:\s*[^\n<>]*<)[^<>\s@]+@[^<>\s@]+(>)\s*$")
 ASSIGNMENT = re.compile(
     r"""(?ix)(?<![\w-])(?:api[_-]?key|password|passwd|client[_-]?secret|app[_-]?secret|access[_-]?token|refresh[_-]?token|auth[_-]?token|private[_-]?key|session[_-]?cookie|secret[_-]?key)["']?\s*[:=]\s*["']([^"'\r\n]{4,})["']"""
 )
@@ -100,7 +101,11 @@ def check_text(raw, where, *, git_metadata=False):
     contact_text = text
     if git_metadata:
         header, separator, message = text.partition("\n\n")
-        contact_text = GIT_IDENTITY_EMAIL.sub(r"\1\2", header) + separator + message
+        contact_text = (
+            GIT_IDENTITY_EMAIL.sub(r"\1\2", header)
+            + separator
+            + GIT_COAUTHOR_EMAIL.sub(r"\1\2", message)
+        )
     if CONTACT.search(contact_text):
         fail(where, "contact address")
     if UNQUOTED.search(text) or any(not PLACEHOLDER.fullmatch(m[1]) for m in ASSIGNMENT.finditer(text)):

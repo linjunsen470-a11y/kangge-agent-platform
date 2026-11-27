@@ -109,6 +109,22 @@ class RepositoryCheckTests(unittest.TestCase):
         self.assertEqual(log.count("contact address"), 2)
         self.assertNotIn(mailbox, log)
 
+    def test_coauthored_by_trailer_is_exempt_from_contact_rule(self):
+        coauthor = "12345+dev" + "@" + "users.noreply.github.com"
+        self.git(
+            "commit", "--allow-empty", "-qm",
+            "Squash PR (#2)\n\nCo-authored-by: Dev <" + coauthor + ">",
+        )
+        self.check(0)
+        leaked = "private" + "@" + "fixture.test"
+        self.git(
+            "commit", "--allow-empty", "-qm",
+            "Squash PR (#3)\n\nCo-authored-by: Dev <" + coauthor + "> " + leaked,
+        )
+        _, log = self.check(1)
+        self.assertIn("contact address", log)
+        self.assertNotIn(leaked, log)
+
     def test_signed_query_parameters(self):
         keys = ("x-amz-signature", "X-Amz-Credential", "X-Goog-Signature", "SIG", "access_token", "auth_token")
         for key in keys:

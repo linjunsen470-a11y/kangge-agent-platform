@@ -26,7 +26,7 @@
 ## 公开内容说明
 
 - **技能依赖**：`skills/http-validation/requirements.txt` 与核对副本逐字节一致；`skills/document-rendering/requirements.txt` 仅保留原有 5 项必需依赖声明及次序。两份目录均采用通用命名，当前包含的原业务技能入口为 0。
-- **Workspace**：保留通用工作约定 [AGENTS.md](../workspace/AGENTS.md) 以及 npm 依赖声明与锁文件。后续精简移除了 Node 环境中不适用的浏览器 DOM 库 `html2canvas` 及其 4 个独占传递依赖（剩余 322 个锁定项均保留原 SHA-512 完整性摘要）；第三方包代码由使用者按需从公共注册表安装。
+- **Workspace**：保留通用工作约定 [AGENTS.md](../workspace/AGENTS.md)、通用制作偏好 [MEMORY.md](../workspace/memory/MEMORY.md) 以及 npm 依赖声明与锁文件。后续精简移除了 Node 环境中不适用的浏览器 DOM 库 `html2canvas` 及其 4 个独占传递依赖（剩余 322 个锁定项均保留原 SHA-512 完整性摘要）；第三方包代码由使用者按需从公共注册表安装。
 - 静态检查器、仓库检查技能和 CI 来自仓库整理，独立于原包的 6 项。检查器自动识别技能目录，用固定版本的 PyYAML 解析配置和技能元数据。精简后的仓库已移除 `.env.example` 和手工目录台账 `skill-modules.tsv`。[仓库检查技能](../skills/repository-check/SKILL.md)
 
 ## 隔离依据
