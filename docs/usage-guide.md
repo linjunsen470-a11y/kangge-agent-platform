@@ -35,6 +35,7 @@
 kangge-agent-platform/
 ├── README.md                              # 项目总览与快速命令入口
 ├── docs/
+│   ├── real-estate-scenarios.md           # 房产业务应用场景说明（重点看这个项目能干什么）
 │   ├── usage-guide.md                     # 本文件：通俗功能说明与使用教程
 │   └── public-release.md                  # 公开迁移审计说明与原归档来源映射
 ├── skills/
